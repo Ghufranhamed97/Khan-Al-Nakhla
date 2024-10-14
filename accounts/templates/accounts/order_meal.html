@@ -1,0 +1,96 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+
+<div class="font-sans">
+    <nav class="bg-amber-900 text-white p-4 fixed w-full top-0 z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 id="khan-al-nakhla" class="text-2xl font-bold">Khan Al-Nakhla</h1>
+            <ul class="flex space-x-4">
+                <li><a href="{% url 'home' %}" class="hover:text-amber-200 transition duration-300">Home</a></li>
+                <li><a href="{% url 'order_meal' %}" class="hover:text-amber-200 transition duration-300">Menu</a></li>
+                <li><a href="{% url 'reserve_table' %}" class="hover:text-amber-200 transition duration-300">Reservations</a></li>
+                <li><a href="#contact-section" class="hover:text-amber-200 transition duration-300">Contact</a></li>
+                <li><a href="{% url 'login' %}" class="hover:text-amber-200 transition duration-300">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8 mt-20">
+        <h2 id="order-a-meal" class="text-3xl font-bold mb-6 text-center text-amber-800">Order a Meal</h2>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div id="message-container" class="mb-4"></div>
+
+            {% for category, meals in meal_categories.items %}
+                <h3 id="category-{{ category|slugify }}" class="text-2xl font-semibold mt-8 mb-4 text-amber-700">{{ category }}</h3>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {% for meal in meals %}
+                        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                            {% if meal.image %}
+                                <img src="{{ meal.image.url }}" alt="{{ meal.name }}" class="w-full h-48 object-cover">
+                            {% else %}
+                                <div class="w-full h-48 bg-gray-200 flex items-center justify-center">
+                                    <span class="text-gray-500">No image available</span>
+                                </div>
+                            {% endif %}
+
+                            <div class="p-4">
+                                <h4 id="meal-{{ meal.id }}" class="text-lg font-medium mb-2 text-amber-900">{{ meal.name }} - $<span class="meal-price">{{ meal.price }}</span></h4>
+                                <p>{{ meal.description }}</p>
+
+                                <div class="flex items-center mt-4">
+                                    <label for="quantity_{{ meal.id }}" class="mr-2">Quantity:</label>
+                                    <input type="number" id="quantity_{{ meal.id }}" name="quantity_{{ meal.id }}" 
+                                           min="0" value="0" class="w-16 px-2 py-1 border rounded quantity-input">
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+
+            <div class="mt-8 text-right">
+                <h3 id="total-price-label" class="text-xl font-semibold text-amber-900">Total: $<span id="total-price">0.00</span></h3>
+            </div>
+
+            <div class="mt-8 text-center">
+                <button type="submit" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded transition duration-300">
+                    Place Order
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <footer class="bg-amber-900 text-white p-4 mt-8">
+        <div class="container mx-auto text-center">
+            © 2024 Khan Al-Nakhla. All rights reserved.
+        </div>
+    </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInputs = document.querySelectorAll('.quantity-input');
+    const totalPriceSpan = document.getElementById('total-price');
+
+    function updateTotalPrice() {
+        let total = 0;
+        quantityInputs.forEach(input => {
+            const quantity = parseInt(input.value) || 0;
+            const price = parseFloat(input.closest('.bg-white').querySelector('.meal-price').textContent);
+            total += quantity * price;
+        });
+        totalPriceSpan.textContent = total.toFixed(2);
+    }
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', updateTotalPrice);
+        input.addEventListener('input', updateTotalPrice);
+    });
+});
+</script>
+
+{% endblock %}
+
