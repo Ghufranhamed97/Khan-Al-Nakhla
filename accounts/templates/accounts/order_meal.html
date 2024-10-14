@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="font-sans">
+    <nav class="bg-amber-900 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 id="khan-al-nakhla" class="text-2xl font-bold">Khan Al-Nakhla</h1>
+            <ul class="flex space-x-4">
+                <li><a href="{% url 'home' %}" class="hover:text-amber-200">Home</a></li>
+                <li><a href="{% url 'order_meal' %}" class="hover:text-amber-200">Menu</a></li>
+                <li><a href="{% url 'reserve_table' %}" class="hover:text-amber-200">Reservations</a></li>
+                <li><a href="{% url 'home' %}#contact-section" class="hover:text-amber-200">Contact</a></li>
+                <li><a href="{% url 'login' %}" class="hover:text-amber-200">Login</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 id="order-a-meal" class="text-3xl font-bold mb-6 text-center text-amber-800">Order a Meal</h1>
+
+        {% csrf_token %}
+
+        <div id="message-container" class="mb-4"></div>
+
+        {% for category, meals in meal_categories.items %}
+        <h2 id="category-{{ category|slugify }}" class="text-2xl font-semibold mt-8 mb-4 text-amber-700">{{ category }}</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for meal in meals %}
+            <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                <div class="h-48 bg-cover bg-center" style="background-image: url('{% static 'css/images/placeholder-dish.jpg' %}');"></div>
+                <div class="p-4">
+                    <h4 id="meal-{{ meal.id }}" class="text-lg font-medium mb-2 text-amber-900">{{ meal.name }} - ${{ meal.price }}</h4>
+                    <p class="text-gray-600 mb-4">{{ meal.description }}</p>
+                    <div class="flex items-center mt-4">
+                        <input type="number" name="quantity_{{ meal.id }}" min="0" value="0" class="w-16 p-2 border border-amber-300 rounded mr-2">
+                        <button class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded">Add to Order</button>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endfor %}
+
+        <div class="mt-8 text-right">
+            <h3 id="total-price-label" class="text-xl font-semibold text-amber-900">Total: $<span id="total-price">0.00</span></h3>
+        </div>
+
+        <div class="mt-8 text-center">
+            <button id="place-order" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-3 px-6 rounded-lg text-xl">Place Order</button>
+        </div>
+    </div>
+
+    <footer class="bg-amber-900 text-white py-8 mt-16">
+        <div class="container mx-auto text-center">
+            <p>© 2024 Khan Al-Nakhla. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const quantityInputs = document.querySelectorAll('input[type="number"]');
+    const totalPriceElement = document.getElementById('total-price');
+    let total = 0;
+
+    quantityInputs.forEach(input => {
+        input.addEventListener('change', updateTotal);
+    });
+
+    function updateTotal() {
+        total = 0;
+        quantityInputs.forEach(input => {
+            const price = parseFloat(input.closest('.p-4').querySelector('h4').textContent.split('$')[1]);
+            total += price * input.value;
+        });
+        totalPriceElement.textContent = total.toFixed(2);
+    }
+
+    document.getElementById('place-order').addEventListener('click', function() {
+        alert('Your order has been placed! Total: $' + total.toFixed(2));
+    });
+});
+</script>
+
+{% endblock %}

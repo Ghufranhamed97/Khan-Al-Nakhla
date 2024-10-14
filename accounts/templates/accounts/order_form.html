@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center text-green-800">Place an Order</h1>
+    <div class="max-w-2xl mx-auto bg-white p-8 border border-gray-300 rounded-lg shadow-lg">
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div id="order-items">
+                {{ formset.management_form }}
+                {% for form in formset %}
+                    <div class="order-item mb-4 p-4 border border-gray-200 rounded">
+                        {{ form.as_p }}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" id="add-item" class="mt-4 bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-600">
+                Add Another Item
+            </button>
+            <button type="submit" class="mt-4 w-full bg-green-500 text-white font-bold py-2 px-4 rounded hover:bg-green-600">
+                Place Order
+            </button>
+        </form>
+    </div>
+</div>
+
+<script src="{% static 'js/jquery.min.js' %}"></script>
+<script>
+    $(document).ready(function() {
+        $('#add-item').click(function() {
+            var form_idx = $('#id_orderitem_set-TOTAL_FORMS').val();
+            $('#order-items').append($('#order-items').children().last().clone());
+            $('#order-items').children().last().find(':input').each(function() {
+                var name = $(this).attr('name').replace('-' + (form_idx-1) + '-', '-' + form_idx + '-');
+                var id = 'id_' + name;
+                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+            });
+            $('#id_orderitem_set-TOTAL_FORMS').val(parseInt(form_idx) + 1);
+        });
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="font-sans">
+  <nav class="bg-amber-900 text-white p-4">
+      <div class="container mx-auto flex justify-between items-center">
+          <h1 id="khan-al-nakhla" class="text-2xl font-bold">Khan Al-Nakhla</h1>
+          <ul class="flex space-x-4">
+              <li><a href="{% url 'home' %}" class="hover:text-amber-200">Home</a></li>
+              <li><a href="{% url 'order_meal' %}" class="hover:text-amber-200">Menu</a></li>
+              <li><a href="{% url 'reserve_table' %}" class="hover:text-amber-200">Reservations</a></li>
+              <li><a href="#contact-section" class="hover:text-amber-200">Contact</a></li>
+              <li><a href="{% url 'login' %}" class="hover:text-amber-200">Login</a></li>
+          </ul>
+      </div>
+  </nav>
+    <section class="hero-section relative h-screen bg-cover bg-center" style="background-image: url('{% static 'css/images/Labneh Recipe (1).jpeg' %}');">
+        <div class="absolute inset-0 bg-black bg-opacity-50"></div>
+        <div class="absolute inset-0 flex flex-col justify-center items-center text-white text-center">
+            <h2 id="welcome-to-khan-al-nakhla" class="text-5xl font-bold mb-4">Welcome to Khan Al-Nakhla</h2>
+            <p class="text-xl mb-8">Experience the finest Middle Eastern cuisine</p>
+            <a href="{% url 'order_meal' %}" class="button bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded mt-4 inline-block">Order Now</a>
+        </div>
+    </section>
+
+    <section class="py-16 bg-amber-50">
+        <div class="container mx-auto">
+            <h3 id="our-signature-dishes" class="text-3xl font-bold text-center mb-12 text-amber-800">Our Signature Dishes</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {% for dish in "123"|make_list %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    <img src="{% static 'css/images/dish'|add:dish|add:'.jpeg' %}" alt="Dish {{ dish }}" class="w-full h-48 object-cover">
+                    <div class="p-4">
+                        <h4 id="delicious-dish-{{ dish }}" class="font-bold text-xl mb-2 text-amber-900">Delicious Dish {{ dish }}</h4>
+                        <p class="text-gray-700 mb-4">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                        <a href="{% url 'order_meal' %}" class="button bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded mt-2 inline-block">Order Now</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section class="py-16 bg-amber-800 text-white">
+        <div class="container mx-auto text-center">
+            <h3 id="what-our-customers-say" class="text-3xl font-bold mb-12">What Our Customers Say</h3>
+            <div class="flex flex-wrap justify-center gap-8">
+                {% for i in "123"|make_list %}
+                <div class="max-w-md bg-amber-900 p-6 rounded-lg" style="width: 300px; margin-bottom: 20px;">
+                    <div class="flex justify-center mb-4">
+                        {% for _ in "12345"|make_list %}
+                        <span class="text-amber-400" style="color: #fbbf24;">★</span>
+                        {% endfor %}
+                    </div>
+                    <p class="mb-4">"Exceptional food and service. Khan Al-Nakhla is a true gem!"</p>
+                    <p class="font-bold">- Happy Customer {{ i }}</p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <section id="reservation-section" class="py-16 bg-amber-100">
+        <div class="container mx-auto flex flex-wrap">
+            <div class="w-full md:w-1/2 p-8">
+                <h3 id="make-a-reservation" class="text-3xl font-bold mb-6 text-amber-800">Make a Reservation</h3>
+                <a href="{% url 'reserve_table' %}" class="button bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded mt-4 inline-block">Reserve Now</a>
+            </div>
+            <div id="contact-section" class="w-full md:w-1/2 p-8">
+                <h3 id="contact-us" class="text-3xl font-bold mb-6 text-amber-800">Contact Us</h3>
+                <div class="space-y-4 text-amber-900">
+                    <p><span class="mr-2">📍</span> 123 Spice Street, Foodville, FA 12345</p>
+                    <p><span class="mr-2">📞</span> (555) 123-4567</p>
+                    <p><span class="mr-2">✉️</span> info@khan-al-nakhla.com</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-amber-900 text-white py-8">
+        <div class="container mx-auto text-center">
+            <p>© 2024 Khan Al-Nakhla. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+
+{% endblock %}
