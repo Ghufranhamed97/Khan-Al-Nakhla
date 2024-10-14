@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h2 class="text-3xl font-bold mb-6 text-center text-amber-800">Staff Reservation List</h2>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <table class="min-w-full divide-y divide-amber-200">
+            <thead class="bg-amber-50">
+                <tr>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-500 uppercase tracking-wider">Customer</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-500 uppercase tracking-wider">Date</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-500 uppercase tracking-wider">Time</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-500 uppercase tracking-wider">Guests</th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-amber-500 uppercase tracking-wider">Table</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white divide-y divide-amber-200">
+                {% for reservation in reservations %}
+                <tr>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ reservation.customer.username }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ reservation.date }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ reservation.time }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ reservation.number_of_guests }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">{{ reservation.table_number }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="px-6 py-4 text-center text-amber-500">No reservations found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

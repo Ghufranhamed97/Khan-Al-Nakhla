@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center text-amber-800">Order Details</h1>
+    
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <h2 class="text-2xl font-bold mb-4">Bill #{{ bill.id }}</h2>
+        
+        <p class="mb-2"><strong>Order Date:</strong> {{ bill.created_at|date:"F d, Y H:i" }}</p>
+        <p class="mb-4"><strong>Customer:</strong> {{ bill.customer.username }}</p>
+        
+        <h3 class="text-xl font-bold mb-2">Order Items:</h3>
+        <table class="w-full mb-4">
+            <thead>
+                <tr>
+                    <th class="text-left">Item</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Price</th>
+                    <th class="text-right">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in bill.order.orderitem_set.all %}
+                <tr>
+                    <td>{{ item.meal.name }}</td>
+                    <td class="text-right">{{ item.quantity }}</td>
+                    <td class="text-right">${{ item.meal.price }}</td>
+                    <td class="text-right">${{ item.meal.price|multiply:item.quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div class="text-right">
+            <p class="text-xl font-bold">Total: ${{ bill.amount }}</p>
+        </div>
+        
+        <div class="mt-8">
+            <a href="{% url 'home' %}" class="bg-amber-500 hover:bg-amber-600 text-white font-bold py-2 px-4 rounded">
+                Back to Home
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold mb-6 text-center text-green-800">Your Bills</h1>
+    {% if bills %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {% for bill in bills %}
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-semibold mb-2">Bill #{{ bill.id }}</h2>
+                    <p>Amount: ${{ bill.total_amount }}</p>
+                    <p>Status: {{ bill.get_payment_status_display }}</p>
+                    <p>Date: {{ bill.created_at|date:"F d, Y" }}</p>
+                    <div class="mt-4">
+                        <a href="{% url 'bill_detail' bill.pk %}" class="text-blue-500 hover:text-blue-700">View Details</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-center text-gray-600">You have no bills yet.</p>
+    {% endif %}
+</div>
+{% endblock %}
