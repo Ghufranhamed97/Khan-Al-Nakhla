@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="font-sans bg-amber-50 min-h-screen">
+    <nav class="bg-amber-900 text-white p-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 id="khan-al-nakhla" class="text-2xl font-bold">Khan Al-Nakhla</h1>
+            <ul class="flex space-x-4">
+                <li><a href="{% url 'home' %}" class="hover:text-amber-200">Home</a></li>
+                <li><a href="{% url 'logout' %}" class="hover:text-amber-200">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold mb-6 text-center text-amber-800">Staff Dashboard</h1>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <a href="{% url 'meal_list' %}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold mb-2 text-amber-700">Manage Meals</h2>
+                <p class="text-amber-600">Add, edit, or remove meals from the menu.</p>
+            </a>
+            <a href="{% url 'staff_reservation_list' %}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold mb-2 text-amber-700">View Reservations</h2>
+                <p class="text-amber-600">See and manage all customer reservations.</p>
+            </a>
+            <a href="{% url 'staff_bill_list' %}" class="bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+                <h2 class="text-xl font-bold mb-2 text-amber-700">View Bills</h2>
+                <p class="text-amber-600">Access and manage customer bills.</p>
+            </a>
+        </div>
+    </div>
+
+    <footer class="bg-amber-900 text-white py-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>© 2024 Khan Al-Nakhla. All rights reserved.</p>
+        </div>
+    </footer>
+</div>
+
+{% endblock %}
